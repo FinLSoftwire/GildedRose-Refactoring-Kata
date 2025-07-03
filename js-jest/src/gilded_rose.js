@@ -1,10 +1,10 @@
 const Item = require("./Item");
 
 class Shop {
-  Sulfuras = 'Sulfuras, Hand of Ragnaros';
-  Backstage_Passes = 'Backstage passes to a TAFKAL80ETC concert';
-  Aged_Brie = 'Aged Brie';
-  Conjured = 'Conjured';
+  static Sulfuras = 'Sulfuras, Hand of Ragnaros';
+  static Backstage_Passes = 'Backstage passes to a TAFKAL80ETC concert';
+  static Aged_Brie = 'Aged Brie';
+  static Conjured = 'Conjured';
   constructor(items=[]){
     this.items = items;
   }
@@ -26,8 +26,13 @@ class Shop {
         case Shop.Conjured: item.quality -= (item.sellIn<0?4:2);
         default: item.quality -= (item.sellIn<0?2:1); break;
       }
-      // Clamp value to valid range
-      item.quality = Math.min(Math.max(0, item.quality), 50);
+      if (item.name === Shop.Sulfuras) {
+        if (item.quality !== 80)
+          throw new Error("Sulfuras should have a quality of 80");
+      } else {
+        // Clamp value to valid range
+        item.quality = Math.min(Math.max(0, item.quality), 50);
+      }
     });
     return this.items;
   }
